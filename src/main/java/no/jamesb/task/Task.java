@@ -20,7 +20,7 @@ public class Task<T> {
 	 * @return Returns the task.
 	 */
 	public static <T> Task<T> complete(T value) {
-		return null;
+		return new Task<>(TaskResult.success(value));
 	}
 
 	/**
