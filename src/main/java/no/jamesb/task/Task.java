@@ -77,8 +77,11 @@ public class Task<T> {
 
 	protected AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
 
-	public Task(TaskAction<T> action) {
+	public Task(TaskResult<T> result) {
+		this._result.set(result);
+	}
 
+	public Task(TaskAction<T> action) {
 	}
 
 	/**
