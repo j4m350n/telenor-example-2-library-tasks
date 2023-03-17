@@ -75,7 +75,7 @@ public class Task<T> {
 		return null;
 	}
 
-	protected AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
+	protected final AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
 
 	public Task(TaskResult<T> result) {
 		this._result.set(result);
