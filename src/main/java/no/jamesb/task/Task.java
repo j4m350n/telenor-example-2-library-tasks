@@ -99,15 +99,7 @@ public class Task<T> {
 	 * @return The completed value.
 	 */
 	public T await() {
-		TaskResult<T> result = this._result.get();
-		while (result == null) {
-			try {
-				wait();
-			} catch (InterruptedException _e) {
-				// ignored
-			}
-			result = this._result.get();
-		}
+		TaskResult<T> result = this.waitForResult();
 		if (result.didThrow) {
 			throw new RuntimeException(result.exception);
 		}
@@ -182,6 +174,19 @@ public class Task<T> {
 	 */
 	public Task<T> or(TaskActionOr<T> action) {
 		return null;
+	}
+
+	protected TaskResult<T> waitForResult() {
+		TaskResult<T> result = this._result.get();
+		while (result == null) {
+			try {
+				wait();
+			} catch (InterruptedException _e) {
+				// ignored
+			}
+			result = this._result.get();
+		}
+		return result;
 	}
 
 }
