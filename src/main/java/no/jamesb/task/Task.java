@@ -42,7 +42,7 @@ public class Task<T> {
 	 * @return Returns the task.
 	 */
 	public static <T> Task<T> fail(Exception exception) {
-		return null;
+		return new Task<>(TaskResult.failure(exception));
 	}
 
 	/**
