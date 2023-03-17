@@ -1,6 +1,7 @@
 package no.jamesb.task;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Task<T> {
 
@@ -73,6 +74,8 @@ public class Task<T> {
 	public static <T> Task<List<T>> all(List<Task<T>> tasks) {
 		return null;
 	}
+
+	protected AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
 
 	public Task(TaskAction<T> action) {
 
