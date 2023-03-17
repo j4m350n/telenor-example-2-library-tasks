@@ -99,7 +99,19 @@ public class Task<T> {
 	 * @return The completed value.
 	 */
 	public T await() {
-		return null;
+		TaskResult<T> result = this._result.get();
+		while (result == null) {
+			try {
+				wait();
+			} catch (InterruptedException _e) {
+				// ignored
+			}
+			result = this._result.get();
+		}
+		if (result.didThrow) {
+			throw new RuntimeException(result.exception);
+		}
+		return result.value;
 	}
 
 	/**
