@@ -1,5 +1,6 @@
 plugins {
 	id "java-library"
+	id "maven-publish"
 }
 
 group "no.jamesb.task"
@@ -16,4 +17,17 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+publishing {
+	repositories {
+		maven {
+			name = "GitHub-Packages"
+			url = "https://maven.pkg.github.com/j4m350n/telenor-example-2-library-tasks"
+			credentials {
+				username = System.getenv("GITHUB_ACTOR")
+				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
 }
