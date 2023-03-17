@@ -18,4 +18,3 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test
-          gradle-version: 8.0
