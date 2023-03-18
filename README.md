@@ -13,6 +13,7 @@ new Task<User>(() -> findUserSomehow())
     if (ex instanceof NotFoundException) {
       return "user-not-found@example.com";
     }
+    throw ex;
   })
   .map(user -> {
     String email = user.getEmail()
