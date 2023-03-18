@@ -12,7 +12,7 @@ High level overview plan:
     - [x] `<T> Task<T> fail(Exception exception)`: Create and automatically
       throw an exception, causing the Task to
       fail.
-    - [x] `<T> Task<List<T>> awaitAll(List<Task<T>> tasks)`: Wait for all
+    - [ ] `<T> Task<List<T>> awaitAll(List<Task<T>> tasks)`: Wait for all
       provided tasks to complete. **Method renamed to all.**
   - instance methods
     - [x] `T await()`: Wait for the task to finish, returning the *completed*
