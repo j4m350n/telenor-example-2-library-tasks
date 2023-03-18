@@ -4,7 +4,7 @@ plugins {
 }
 
 group "no.jamesb"
-version "0.1.0"
+version "unversioned"
 
 repositories {
 	mavenCentral()
