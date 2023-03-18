@@ -1,5 +1,6 @@
 package no.jamesb.task;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class TaskResult<T> {
 	public static <T> TaskResult<T> success(T value) {
 		return new TaskResult<>(false, null, value);
