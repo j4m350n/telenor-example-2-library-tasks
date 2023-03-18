@@ -7,15 +7,15 @@ High level overview plan:
 - `Task<T>`: An object that creates an awaitable thread, which can also return a
   value `T`.
   - static methods
-    - [ ] `<T> Task<T> complete(T value)`: Create and automatically complete a
+    - [x] `<T> Task<T> complete(T value)`: Create and automatically complete a
       task with the given value.
-    - [ ] `<T> Task<T> fail(Exception exception)`: Create and automatically
+    - [x] `<T> Task<T> fail(Exception exception)`: Create and automatically
       throw an exception, causing the Task to
       fail.
-    - [ ] `<T> Task<List<T>> awaitAll(List<Task<T>> tasks)`: Wait for all
-      provided tasks to complete.
+    - [x] `<T> Task<List<T>> awaitAll(List<Task<T>> tasks)`: Wait for all
+      provided tasks to complete. **Method renamed to all.**
   - instance methods
-    - [ ] `T await()`: Wait for the task to finish, returning the *completed*
+    - [x] `T await()`: Wait for the task to finish, returning the *completed*
       value. Catches and re-throws any exception
       that the task throws.
     - [ ] `<V> Task<V> and(TaskActionAnd<V, T> action)`: Run the
