@@ -71,9 +71,9 @@ class TaskTest {
 		Assertions.assertDoesNotThrow(() -> {
 			Thread currentThread = Thread.currentThread();
 			Task<Integer> task = new Task<>(() -> {
-				Thread.sleep(500);
+				Thread.sleep(100);
 				currentThread.interrupt();
-				Thread.sleep(500);
+				Thread.sleep(100);
 				return 0;
 			});
 			Assertions.assertNull(task._result.get());
