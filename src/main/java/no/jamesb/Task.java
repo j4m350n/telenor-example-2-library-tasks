@@ -9,12 +9,10 @@ public class Task<T> {
 	/**
 	 * <p>Create a new task and automatically complete it with the value.</p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   Integer value = Task.complete(123).await();
 	 *   Assertion.assertEquals(123, value);
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @param value The value returned by the task.
 	 * @param <T>   The type of the value returned by the task.
@@ -29,15 +27,13 @@ public class Task<T> {
 	 * in it.
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 * Assertion.assertThrows(
 	 *   Exception.class,
 	 *   Task.<Integer>fail(new Exception("hello")).await(),
 	 *   "hello"
 	 * );
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @param exception The exception to throw.
 	 * @param <T>       The type of the expected value in the task.
@@ -54,8 +50,7 @@ public class Task<T> {
 	 * fail as well.
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   List<Task<Integer>> tasks = new List<>();
 	 *   list.add(Task.resolve(1));
 	 *   list.add(Task.resolve(2));
@@ -67,7 +62,7 @@ public class Task<T> {
 	 *     result.toArray(new Integer[3])
 	 *   );
 	 * }
-	 * </pre></code>
+	 * </pre>
 	 *
 	 * @param tasks The tasks to wait for.
 	 * @param <T>   The type of the values returned by the provided
@@ -158,16 +153,14 @@ public class Task<T> {
 	 * exception will be re-thrown in a <code>RuntimeException</code>.
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   Integer result = new Task<Integer>(() -> {
 	 *     Thread.sleep(1000);
 	 *     return 123;
 	 *   }).await();
 	 *
 	 *   Assertions.assertEquals(123, result);
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @return The completed value.
 	 */
@@ -184,15 +177,13 @@ public class Task<T> {
 	 * Take the result and map it into a new awaitable task.
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   Integer result = Task.complete(123)
 	 *     .and(previousValue -> Task.complete(previousValue * 2))
 	 *     .await();
 	 *
 	 *   Assertions.asserEquals(246, result);
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @param action The <i>and()</i> action.
 	 * @param <V>    The new task return type.
@@ -219,15 +210,13 @@ public class Task<T> {
 	 * typing the new task type ({@code task.<Integer>map(previousValue -> newValue)}
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   Integer result = Task.complete(123)
 	 *     .map(previousValue -> previousValue * 2)
 	 *     .await();
 	 *
 	 *   Assertions.asserEquals(246, result);
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @param action The <i>map()</i> action.
 	 * @param <V>    The new task return type.
@@ -255,8 +244,7 @@ public class Task<T> {
 	 * value and type of the task.
 	 * </p>
 	 *
-	 * <code class="language-java"><pre>
-	 * {@code
+	 * <pre>{@code
 	 *   Integer result = Task.complete(123)
 	 *     .map(previousValue -> previousValue * 2)
 	 *     .map(previousValue -> {
@@ -270,8 +258,7 @@ public class Task<T> {
 	 *     .await();
 	 *
 	 *   Assertions.asserEquals(-1, result);
-	 * }
-	 * </pre></code>
+	 * }</pre>
 	 *
 	 * @param action The <i>or()</i> action.
 	 * @return The new task.
