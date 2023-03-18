@@ -156,11 +156,11 @@ public class Task<T> {
 	 * @return The new task.
 	 */
 	public <V> Task<V> and(TaskActionAnd<V, T> action) {
-		TaskResult<T> result = this.waitForResult();
-		if (result.didThrow) {
-			return new Task<>(new TaskResult<>(true, result.exception, null));
-		}
-		return new Task<>(() -> action.run(result.value));
+		return new Task<>(() -> {
+			TaskResult<T> result = this.waitForResult();
+			if (result.didThrow) throw result.exception;
+			return action.run(result.value);
+		});
 	}
 
 	/**
