@@ -72,7 +72,7 @@ public class Task<T> {
 	 * by the provided tasks.
 	 */
 	public static <T> Task<List<T>> all(List<Task<T>> tasks) {
-		return null;
+		return new Task<>(() -> tasks.stream().map(Task::await).toList());
 	}
 
 	protected final AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
