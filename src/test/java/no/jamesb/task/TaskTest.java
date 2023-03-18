@@ -70,6 +70,30 @@ class TaskTest {
 	}
 
 	@Test
+	public void constructorAcceptsTaskResultAction() {
+		Assertions.assertDoesNotThrow(() -> {
+			Task<Integer> task = new Task<>(() -> {
+				Thread.sleep(100);
+				return TaskResult.success(0);
+			});
+			Assertions.assertNull(task._result.get());
+			Assertions.assertEquals(0, task.await());
+			Assertions.assertNotNull(task._result.get());
+		});
+
+		Assertions.assertDoesNotThrow(() -> {
+			Task<Integer> task = new Task<>(() -> TaskResult.failure(new Exception("hello")));
+			Assertions.assertNull(task._result.get());
+			Assertions.assertThrows(
+				RuntimeException.class,
+				task::await,
+				"hello"
+			);
+			Assertions.assertNotNull(task._result.get());
+		});
+	}
+
+	@Test
 	public void waitForResultThreadInterruptionShouldDoNothing() {
 		Assertions.assertDoesNotThrow(() -> {
 			Thread currentThread = Thread.currentThread();
@@ -99,7 +123,7 @@ class TaskTest {
 	}
 
 	@Test
-	public void successAnd() {
+	public void successMap() {
 		TaskActionMap<Boolean, Integer> isOne = value -> value == 1;
 		Assertions.assertTrue(Task.complete(1).map(isOne).await());
 		Assertions.assertFalse(Task.complete(2).map(isOne).await());
@@ -107,7 +131,7 @@ class TaskTest {
 	}
 
 	@Test
-	public void failureAnd() {
+	public void failureMap() {
 		Exception e = new Exception("hello");
 		Task<Boolean> task = Task.<Integer>fail(e)
 			.map(value -> value == 1);
@@ -134,5 +158,10 @@ class TaskTest {
 			);
 			return -1;
 		}).await()));
+	}
+
+	@Test
+	public void successAnd() {
+		Assertions.assertDoesNotThrow(() -> Assertions.assertEquals(246, Task.complete(123).and(value -> Task.complete(value * 2)).await()));
 	}
 }
