@@ -1,5 +1,6 @@
 package no.jamesb.task;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -87,11 +88,23 @@ public class Task<T> {
 	}
 
 	public Task(TaskAction<T> action) {
+		final StackTraceElement[] _mainStack;
+		{
+			StackTraceElement[] tmp = Thread.currentThread().getStackTrace();
+			_mainStack = Arrays.copyOfRange(tmp, 2, tmp.length);
+		}
 		this._thread = new Thread(() -> {
 			synchronized (this) {
 				try {
 					this._result.set(TaskResult.success(action.run()));
 				} catch (Exception exception) {
+					{
+						StackTraceElement[] stack = exception.getStackTrace();
+						StackTraceElement[] newStack = new StackTraceElement[stack.length + _mainStack.length];
+						System.arraycopy(stack, 0, newStack, 0, stack.length);
+						System.arraycopy(_mainStack, 0, newStack, stack.length, _mainStack.length);
+						exception.setStackTrace(newStack);
+					}
 					this._result.set(TaskResult.failure(exception));
 				} finally {
 					notifyAll();
