@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Task<T> {
 
 	/**
-	 * Create a new task and automatically complete it with the value.
+	 * <p>Create a new task and automatically complete it with the value.</p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
@@ -24,8 +24,9 @@ public class Task<T> {
 	}
 
 	/**
-	 * Create a new task and automatically throw the provided exception
+	 * <p>Create a new task and automatically throw the provided exception
 	 * in it.
+	 * </p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
@@ -46,9 +47,11 @@ public class Task<T> {
 	}
 
 	/**
+	 * <p>
 	 * Map all the provided tasks into their completed values. If any of
 	 * the provided tasks throws an exception, this entire task will
 	 * fail as well.
+	 * </p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
@@ -99,8 +102,10 @@ public class Task<T> {
 	}
 
 	/**
+	 * <p>
 	 * Wait for the task complete. If the task throws any exceptions the
 	 * exception will be re-thrown in a <code>RuntimeException</code>.
+	 * </p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
