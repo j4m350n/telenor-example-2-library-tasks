@@ -83,12 +83,14 @@ public class Task<T> {
 
 	public Task(TaskAction<T> action) {
 		new Thread(() -> {
-			try {
-				this._result.set(TaskResult.success(action.run()));
-			} catch (Exception exception) {
-				this._result.set(TaskResult.failure(exception));
-			} finally {
-				notifyAll();
+			synchronized (this) {
+				try {
+					this._result.set(TaskResult.success(action.run()));
+				} catch (Exception exception) {
+					this._result.set(TaskResult.failure(exception));
+				} finally {
+					notifyAll();
+				}
 			}
 		}).start();
 	}
@@ -188,7 +190,7 @@ public class Task<T> {
 		return null;
 	}
 
-	protected TaskResult<T> waitForResult() {
+	protected synchronized TaskResult<T> waitForResult() {
 		TaskResult<T> result = this._result.get();
 		while (result == null) {
 			try {
