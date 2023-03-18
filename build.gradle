@@ -18,21 +18,3 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
-
-publishing {
-	repositories {
-		maven {
-			name = "GitHub-Packages"
-			url = uri("https://maven.pkg.github.com/j4m350n/telenor-example-2-library-tasks")
-			credentials {
-				username = System.getenv("GITHUB_ACTOR")
-				password = System.getenv("GITHUB_TOKEN")
-			}
-		}
-	}
-	publications {
-		register("gpr") {
-			from(components.java)
-		}
-	}
-}
