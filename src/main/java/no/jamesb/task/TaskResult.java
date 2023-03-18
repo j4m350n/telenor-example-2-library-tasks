@@ -15,14 +15,16 @@ public class TaskResult<T> {
 	public final T value;
 
 	public TaskResult(boolean didThrow, Exception exception, T value) {
+		if (exception == null && value == null) {
+			throw new NullPointerException("Could not instantiate TaskResult: exception and value cannot both be null!");
+		} else if (didThrow && exception == null) {
+			throw new NullPointerException("Could not instantiate TaskResult: the thrown exception cannot be null!");
+		} else if (!didThrow && value == null) {
+			throw new NullPointerException("Could not instantiate TaskResult: The returned action value cannot be null!");
+		}
+
 		this.didThrow = didThrow;
 		this.exception = exception;
 		this.value = value;
-
-		if (!this.didThrow && this.value == null) {
-			throw new NullPointerException("The provided return value cannot be null when no exception was thrown!");
-		} else if (this.didThrow && this.exception == null) {
-			throw new NullPointerException("The exception cannot be null when an error was expected!");
-		}
 	}
 }
