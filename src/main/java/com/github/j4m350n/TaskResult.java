@@ -1,4 +1,4 @@
-package no.jamesb;
+package com.github.j4m350n;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class TaskResult<T> {

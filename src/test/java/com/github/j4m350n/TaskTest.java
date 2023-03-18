@@ -1,4 +1,4 @@
-package no.jamesb;
+package com.github.j4m350n;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
