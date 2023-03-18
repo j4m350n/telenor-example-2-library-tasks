@@ -199,7 +199,11 @@ public class Task<T> {
 	 * @return The new task.
 	 */
 	public Task<T> or(TaskActionOr<T> action) {
-		return null;
+		return new Task<>(() -> {
+			TaskResult<T> result = this.waitForResult();
+			if (!result.didThrow) return result.value;
+			return action.run(result.exception);
+		});
 	}
 
 	protected synchronized TaskResult<T> waitForResult() {
