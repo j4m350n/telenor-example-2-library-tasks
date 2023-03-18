@@ -1,13 +1,27 @@
 # Awaitable Tasks
 
-## Research
+This library brings a convenient, easy and beautiful way to run synchronous
+blocking code in non-blocking asynchronous threads and interact with the results
+of the tasks.
 
-The purpose of this class is to make it easier to write non-blocking code. The
-way this will be achieved is by running
-the lambdas provided in a thread. Upon researching thread usage in Java I
-discovered that stack traces are even
-shittier. I need to find a way to make these stack traces better.
+> **WARNING**: `null` is not allowed anywhere, it will throw, deal with it! :)
 
-A possibility for this problem is to capture the stack trace before starting the
-thread. Any exceptions thrown inside the thread will get those stack trace lines
-from when before the thread was started.
+<!-- @formatter:off -->
+```java
+new Task<User>(() -> findUserSomehow())
+  .or(ex -> {
+    if (ex instanceof NotFoundException) {
+      return "user-not-found@example.com";
+    }
+  })
+  .map(user -> {
+    String email = user.getEmail()
+    if (email == null) {
+      throw new Exception("Email is null!");
+    }
+  })
+  .and(email -> sendUserEmailSomehow("Hello world"))
+  .await()
+  // ...
+```
+<!-- @formatter:on -->
