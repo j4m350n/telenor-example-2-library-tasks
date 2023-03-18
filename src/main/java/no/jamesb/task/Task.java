@@ -82,6 +82,15 @@ public class Task<T> {
 	}
 
 	public Task(TaskAction<T> action) {
+		new Thread(() -> {
+			try {
+				this._result.set(TaskResult.success(action.run()));
+			} catch (Exception exception) {
+				this._result.set(TaskResult.failure(exception));
+			} finally {
+				notifyAll();
+			}
+		}).start();
 	}
 
 	/**
