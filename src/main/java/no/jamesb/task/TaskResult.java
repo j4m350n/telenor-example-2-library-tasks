@@ -15,9 +15,7 @@ public class TaskResult<T> {
 	public final T value;
 
 	public TaskResult(boolean didThrow, Exception exception, T value) {
-		if (exception == null && value == null) {
-			throw new NullPointerException("Could not instantiate TaskResult: exception and value cannot both be null!");
-		} else if (didThrow && exception == null) {
+		if (didThrow && exception == null) {
 			throw new NullPointerException("Could not instantiate TaskResult: the thrown exception cannot be null!");
 		} else if (!didThrow && value == null) {
 			throw new NullPointerException("Could not instantiate TaskResult: The returned action value cannot be null!");
