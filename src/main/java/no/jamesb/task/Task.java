@@ -76,13 +76,15 @@ public class Task<T> {
 	}
 
 	protected final AtomicReference<TaskResult<T>> _result = new AtomicReference<>(null);
+	protected final Thread _thread;
 
 	public Task(TaskResult<T> result) {
 		this._result.set(result);
+		this._thread = null;
 	}
 
 	public Task(TaskAction<T> action) {
-		new Thread(() -> {
+		this._thread = new Thread(() -> {
 			synchronized (this) {
 				try {
 					this._result.set(TaskResult.success(action.run()));
@@ -92,7 +94,8 @@ public class Task<T> {
 					notifyAll();
 				}
 			}
-		}).start();
+		});
+		this._thread.start();
 	}
 
 	/**
@@ -196,7 +199,7 @@ public class Task<T> {
 			try {
 				wait();
 			} catch (InterruptedException _e) {
-				// ignored
+				Thread.currentThread().interrupt();
 			}
 			result = this._result.get();
 		}
