@@ -88,11 +88,7 @@ public class Task<T> {
 	}
 
 	public Task(TaskAction<T> action) {
-		final StackTraceElement[] _mainStack;
-		{
-			StackTraceElement[] tmp = Thread.currentThread().getStackTrace();
-			_mainStack = Arrays.copyOfRange(tmp, 2, tmp.length);
-		}
+		final StackTraceElement[] _mainStack = this.getStackTrace();
 		this._thread = new Thread(() -> {
 			synchronized (this) {
 				try {
@@ -112,6 +108,48 @@ public class Task<T> {
 			}
 		});
 		this._thread.start();
+	}
+
+	public Task(TaskResultAction<T> action) {
+		final StackTraceElement[] _mainStack = this.getStackTrace();
+		this._thread = new Thread(() -> {
+			synchronized (this) {
+				try {
+					TaskResult<T> result = action.run();
+					if (result.didThrow) {
+						{
+							StackTraceElement[] stack = result.exception.getStackTrace();
+							StackTraceElement[] newStack = new StackTraceElement[stack.length + _mainStack.length];
+							System.arraycopy(stack, 0, newStack, 0, stack.length);
+							System.arraycopy(_mainStack, 0, newStack, stack.length, _mainStack.length);
+							result.exception.setStackTrace(newStack);
+						}
+					}
+					this._result.set(result);
+				} catch (Exception exception) {
+					{
+						StackTraceElement[] stack = exception.getStackTrace();
+						StackTraceElement[] newStack = new StackTraceElement[stack.length + _mainStack.length];
+						System.arraycopy(stack, 0, newStack, 0, stack.length);
+						System.arraycopy(_mainStack, 0, newStack, stack.length, _mainStack.length);
+						exception.setStackTrace(newStack);
+					}
+					this._result.set(TaskResult.failure(exception));
+				} finally {
+					notifyAll();
+				}
+			}
+		});
+		this._thread.start();
+	}
+
+	private StackTraceElement[] getStackTrace() {
+		final StackTraceElement[] _mainStack;
+		{
+			StackTraceElement[] tmp = Thread.currentThread().getStackTrace();
+			_mainStack = Arrays.copyOfRange(tmp, 3, tmp.length);
+		}
+		return _mainStack;
 	}
 
 	/**
@@ -134,11 +172,19 @@ public class Task<T> {
 	 * @return The completed value.
 	 */
 	public T await() {
-		TaskResult<T> result = this.waitForResult();
+		final TaskResult<T> result = this.waitForResult();
 		if (result.didThrow) {
 			throw new RuntimeException(result.exception);
 		}
 		return result.value;
+	}
+
+	public <V> Task<V> and(TaskActionAnd<V, T> action) {
+		return new Task<>(() -> {
+			TaskResult<T> result = this.waitForResult();
+			if (result.didThrow) return TaskResult.failure(result.exception);
+			return action.run(result.value).waitForResult();
+		});
 	}
 
 	/**
