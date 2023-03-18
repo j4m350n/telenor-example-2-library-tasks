@@ -97,4 +97,23 @@ class TaskTest {
 			Task.all(tasks).await().toArray(new Integer[3])
 		);
 	}
+
+	@Test
+	public void successAnd() {
+		TaskActionAnd<Boolean, Integer> isOne = value -> value == 1;
+		Assertions.assertTrue(Task.complete(1).and(isOne).await());
+		Assertions.assertFalse(Task.complete(2).and(isOne).await());
+		Assertions.assertFalse(Task.complete(0).and(isOne).await());
+	}
+
+	@Test
+	public void failureAnd() {
+		Exception e = new Exception("hello");
+		Task<Boolean> task = Task.<Integer>fail(e)
+			.and(value -> value == 1);
+		TaskResult<Boolean> result = task.waitForResult();
+		Assertions.assertTrue(result.didThrow);
+		Assertions.assertNull(result.value);
+		Assertions.assertEquals(e, result.exception);
+	}
 }
