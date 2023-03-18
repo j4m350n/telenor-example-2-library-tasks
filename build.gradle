@@ -18,3 +18,21 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
+
+wrapper {
+	gradleVersion = "8.0.2"
+	distributionType = Wrapper.DistributionType.ALL
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+		}
+	}
+}
