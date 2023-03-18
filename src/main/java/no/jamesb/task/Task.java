@@ -150,25 +150,25 @@ public class Task<T> {
 	 * <p>
 	 * This method has the ability to change/mutate the type returned
 	 * by the task over each call, either by inferring
-	 * ({@code task.and(previousValue -> newValue)} or by strictly
-	 * typing the new task type ({@code task.<Integer>and(previousValue -> newValue)}
+	 * ({@code task.map(previousValue -> newValue)} or by strictly
+	 * typing the new task type ({@code task.<Integer>map(previousValue -> newValue)}
 	 * </p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
 	 *   Integer result = Task.complete(123)
-	 *     .and(previousValue -> previousValue * 2)
+	 *     .map(previousValue -> previousValue * 2)
 	 *     .await();
 	 *
 	 *   Assertions.asserEquals(246, result);
 	 * }
 	 * </pre></code>
 	 *
-	 * @param action The <i>and()</i> action.
+	 * @param action The <i>map()</i> action.
 	 * @param <V>    The new task return type.
 	 * @return The new task.
 	 */
-	public <V> Task<V> and(TaskActionAnd<V, T> action) {
+	public <V> Task<V> map(TaskActionMap<V, T> action) {
 		return new Task<>(() -> {
 			TaskResult<T> result = this.waitForResult();
 			if (result.didThrow) throw result.exception;
@@ -186,15 +186,15 @@ public class Task<T> {
 	 * <b>Note:</b> Because this function possibly returns the previous value, the
 	 * new value must also share the same type as the previous value, thus, the
 	 * Task type becomes immutable and cannot change over time with <code>or</code>
-	 * calls. You can, however, use {@link Task#and(TaskActionAnd)} to mutate the
+	 * calls. You can, however, use {@link Task#map(TaskActionMap)} to mutate the
 	 * value and type of the task.
 	 * </p>
 	 *
 	 * <code class="language-java"><pre>
 	 * {@code
 	 *   Integer result = Task.complete(123)
-	 *     .and(previousValue -> previousValue * 2)
-	 *     .and(previousValue -> {
+	 *     .map(previousValue -> previousValue * 2)
+	 *     .map(previousValue -> {
 	 *       throw new Exception("hello");
 	 *     })
 	 *     .or(exception -> {
@@ -208,7 +208,7 @@ public class Task<T> {
 	 * }
 	 * </pre></code>
 	 *
-	 * @param action The <i>and()</i> action.
+	 * @param action The <i>or()</i> action.
 	 * @return The new task.
 	 */
 	public Task<T> or(TaskActionOr<T> action) {
