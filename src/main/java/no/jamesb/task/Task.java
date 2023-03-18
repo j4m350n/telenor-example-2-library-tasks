@@ -179,6 +179,25 @@ public class Task<T> {
 		return result.value;
 	}
 
+	/**
+	 * <p>
+	 * Take the result and map it into a new awaitable task.
+	 * </p>
+	 *
+	 * <code class="language-java"><pre>
+	 * {@code
+	 *   Integer result = Task.complete(123)
+	 *     .and(previousValue -> Task.complete(previousValue * 2))
+	 *     .await();
+	 *
+	 *   Assertions.asserEquals(246, result);
+	 * }
+	 * </pre></code>
+	 *
+	 * @param action The <i>and()</i> action.
+	 * @param <V>    The new task return type.
+	 * @return The new task.
+	 */
 	public <V> Task<V> and(TaskActionAnd<V, T> action) {
 		return new Task<>(() -> {
 			TaskResult<T> result = this.waitForResult();
