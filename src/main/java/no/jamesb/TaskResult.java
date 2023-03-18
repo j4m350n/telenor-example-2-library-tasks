@@ -1,4 +1,4 @@
-package no.jamesb.task;
+package no.jamesb;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class TaskResult<T> {
